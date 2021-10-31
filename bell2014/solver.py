@@ -37,7 +37,8 @@ class IntrinsicSolver(object):
         self.decomposition_history = []
         self.initialize_intensities()
 
-        for i in xrange(self.params.n_iters):
+        for i in range(self.params.n_iters):
+        #for i in range(self.params.n_iters):
             if self.params.logging:
                 print("\nrun: starting iteration %s/%s" % (i, self.params.n_iters))
             self.decomposition.iter_num = i
@@ -250,10 +251,10 @@ class IntrinsicSolver(object):
         # immediate pixel neighbors are smoothed.  This code is slightly more
         # general in that it allows to smooth pixels k units away if you set
         # shading_smooth_k > 1, weighted by 1/(k*k).
-        for k in xrange(1, self.params.shading_smooth_k + 1):
+        for k in range(1, self.params.shading_smooth_k + 1):
             weight = 1.0 / (k * k)
-            for i in xrange(rows - k):
-                for j in xrange(cols - k):
+            for i in range(rows - k):
+                for j in range(cols - k):
                     if not mask[i, j]:
                         continue
                     if mask[i + k, j]:
@@ -262,7 +263,7 @@ class IntrinsicSolver(object):
                         if l0 != l1:
                             if self.params.stage2_chromaticity:
                                 # RGB interpretation
-                                for c in xrange(3):
+                                for c in range(3):
                                     A_rows.append(len(b))
                                     A_cols.append(l0)
                                     A_data.append(weight)
@@ -293,7 +294,7 @@ class IntrinsicSolver(object):
                         if l0 != l1:
                             if self.params.stage2_chromaticity:
                                 # RGB interpretation
-                                for c in xrange(3):
+                                for c in range(3):
                                     A_rows.append(len(b))
                                     A_cols.append(l0)
                                     A_data.append(weight)
@@ -376,7 +377,11 @@ class IntrinsicSolver(object):
         chromaticities = self.decomposition.chromaticities
 
         # split labels
-        new_labels = morphology.label(labels, neighbors=neighbors)
+        #new_labels = morphology.label(labels, neighbors=neighbors)
+        connectivity=1
+        if neighbors>4:
+            connectivity=2
+        new_labels = morphology.label(labels, connectivity=connectivity)
 
         # map labels
         self.decomposition.labels_nz = new_labels[self.input.mask_nz]

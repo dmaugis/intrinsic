@@ -2,7 +2,8 @@ import os
 import sys
 import csv
 import gzip
-import cPickle
+#import cPickle
+import pickle 
 import numpy as np
 
 from ..density import ProbDensityHistogram
@@ -50,7 +51,7 @@ class ProbAbsoluteReflectance(object):
             self.density = ProbDensityHistogram()
             self.density.train(data, bins=100, bandwidth=3)
 
-            cPickle.dump(
+            pickle.dump(
                 obj=self.density,
                 file=gzip.open(data_filename, "wb"),
                 protocol=cPickle.HIGHEST_PROTOCOL
@@ -62,7 +63,11 @@ class ProbAbsoluteReflectance(object):
             if path not in sys.path:
                 sys.path.append(path)
 
-            self.density = cPickle.load(gzip.open(data_filename, "rb"))
+            #self.density = cPickle.load(gzip.open(data_filename, "rb"))
+            with gzip.open(data_filename, "rb") as f:
+                u = pickle._Unpickler(f)
+                u.encoding = 'latin1'
+                self.density = u.load()
 
         if self.params.logging:
             print("loaded reflectances")

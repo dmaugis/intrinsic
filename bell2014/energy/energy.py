@@ -5,6 +5,7 @@ from ..image_util import gaussian_blur_gray_image_nz
 from .prob_abs_r import ProbAbsoluteReflectance
 from .prob_abs_s import ProbAbsoluteShading
 
+xrange=range
 
 class IntrinsicEnergy(object):
 
